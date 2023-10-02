@@ -1,0 +1,15 @@
+models:
+  Paciente:
+    nombre: string
+    apellido_materno: string unique
+    apellido_paterno: longtext
+    telefono: string    
+  Category:
+    name: string
+    slug: string unique
+    relationships:
+      hasMany: Article
+
+
+controllers:
+  # ...
