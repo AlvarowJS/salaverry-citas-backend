@@ -4,12 +4,40 @@ models:
     apellido_materno: string unique
     apellido_paterno: longtext
     telefono: string    
-  Category:
-    name: string
-    slug: string unique
-    relationships:
-      hasMany: Article
 
+  Ubicacion:
+    nombre_ubicacion: string
+  Consultorio:
+    numero_consultorio: string
+    relationships:
+      hasMany: Ubicacion
+
+  Pago_tipo:
+    tipoPago: string    
+  Pago:
+    monto: float
+    relationships:
+      hasMany: Pago_tipos
+
+  Medico:
+    nombre: string
+    apellido_paterno: string
+    apellido_materno: string
+    status: boolean
+
+  Cita:
+    fecha: date
+    silla: boolean
+    hora: datetime
+    confirmar: boolean
+    llego: boolean
+    entro: boolean
+    relationships:
+      hasMany: Paciente
+      hasMany: Medico
+      hasMany: Consultorio
+      hasMany: Pago
+      hasMany: Usuario      
 
 controllers:
   # ...
