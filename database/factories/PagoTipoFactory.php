@@ -4,17 +4,16 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use App\Models\Role;
-use App\Models\User;
+use App\Models\Pago_tipo;
 
-class UserFactory extends Factory
+class PagoTipoFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = User::class;
+    protected $model = PagoTipo::class;
 
     /**
      * Define the model's default state.
@@ -22,9 +21,7 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'nombre' => $this->faker->word,
-            'apellidos' => $this->faker->word,
-            'role_id' => Role::factory(),
+            'tipoPago' => $this->faker->word,
         ];
     }
 }

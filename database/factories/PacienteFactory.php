@@ -4,17 +4,16 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use App\Models\Role;
-use App\Models\User;
+use App\Models\Paciente;
 
-class UserFactory extends Factory
+class PacienteFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = User::class;
+    protected $model = Paciente::class;
 
     /**
      * Define the model's default state.
@@ -23,8 +22,9 @@ class UserFactory extends Factory
     {
         return [
             'nombre' => $this->faker->word,
-            'apellidos' => $this->faker->word,
-            'role_id' => Role::factory(),
+            'apellido_materno' => $this->faker->word,
+            'apellido_paterno' => $this->faker->text,
+            'telefono' => $this->faker->word,
         ];
     }
 }
