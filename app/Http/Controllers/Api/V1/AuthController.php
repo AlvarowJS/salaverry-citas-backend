@@ -21,7 +21,7 @@ class AuthController extends Controller
             $nombres = $user->nombres;
             $apellidos = $user->apellidos;
             $email = $user->email;
-            $role_id = 2;
+            $role_id = $user->role_id;
             $status = $user->status;
 
             if ($status) {
@@ -55,20 +55,19 @@ class AuthController extends Controller
         ], 201);
     }
     public function registerAdmin(Request $request)
-    {
-        return "holi";
-        // $user = User::create([
-        //     'nombres' => $request->nombres,
-        //     'apellidos' => $request->apellidos,
-        //     'email' => $request->email,
-        //     'password' => Hash::make($request->password),
-        //     'role_id' => 1,
-        //     'status' => true
-        // ]);
-        // return response()->json([
-        //     'message' => 'Administrador creado exitosamente.',
-        //     'user' => $user,
-        // ], 201);
+    {        
+        $user = User::create([
+            'nombres' => $request->nombres,
+            'apellidos' => $request->apellidos,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role_id' => 1,
+            'status' => true
+        ]);
+        return response()->json([
+            'message' => 'Administrador creado exitosamente.',
+            'user' => $user,
+        ], 201);
     }
 
     public function desactivarUser(Request $request)

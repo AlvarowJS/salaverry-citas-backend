@@ -16,11 +16,12 @@ class User extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre',
+        'nombres',
         'apellidos',
         'email',
         'password',
         'role_id',
+        'status'
     ];
 
     /**
