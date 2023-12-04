@@ -19,6 +19,7 @@ class Consultorio extends Model
     protected $fillable = [
         'numero_consultorio',
         'ubicacion_id',
+        'status'
     ];
 
     /**

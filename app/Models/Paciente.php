@@ -20,6 +20,7 @@ class Paciente extends Model
         'apellido_materno',
         'apellido_paterno',
         'telefono',
+        'status'
     ];
 
     /**

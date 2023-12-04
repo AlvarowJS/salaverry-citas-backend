@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('apellido_materno')->unique();
             $table->longText('apellido_paterno');
             $table->string('telefono');
+            $table->boolean('status');
             $table->timestamps();
         });
     }

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('numero_consultorio');
             $table->unsignedBigInteger('ubicacion_id');
+            $table->boolean('status');
             $table->timestamps();
         });
     }
