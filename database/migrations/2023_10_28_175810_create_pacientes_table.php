@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('pacientes', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->string('apellido_materno')->unique();
+            $table->string('apellido_materno');
             $table->longText('apellido_paterno');
             $table->string('telefono');
             $table->boolean('status');

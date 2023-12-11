@@ -32,7 +32,7 @@ class ConsultorioController extends Controller
 
         $medico = Consultorio::create([
             'numero_consultorio' => $request->numero_consultorio,
-            'ubicacion_id' => $request->ubicacion_id,            
+            'ubicacion_id' => $request->ubicacion_id,
             'status' => true
         ]);
 

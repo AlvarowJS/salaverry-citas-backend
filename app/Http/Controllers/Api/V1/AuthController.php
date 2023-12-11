@@ -31,11 +31,12 @@ class AuthController extends Controller
         ]);
 
         $credentials = $request->only('email', 'password');
-        
+
         if (Auth::attempt($credentials)) {
-    
+
             $user = Auth::user();
             $token = $user->createToken('api_token')->plainTextToken;
+            $userId = $user->id;
             $nombres = $user->nombres;
             $apellidos = $user->apellidos;
             $email = $user->email;
@@ -44,6 +45,7 @@ class AuthController extends Controller
 
             if ($status) {
                 return response()->json([
+                    'user' => $userId,
                     'api_token' => $token,
                     'email' => $email,
                     'nombres' => $nombres,
@@ -73,7 +75,7 @@ class AuthController extends Controller
         ], 201);
     }
     public function registerAdmin(Request $request)
-    {        
+    {
         $user = User::create([
             'nombres' => $request->nombres,
             'apellidos' => $request->apellidos,

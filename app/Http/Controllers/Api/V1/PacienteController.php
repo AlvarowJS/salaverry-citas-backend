@@ -14,7 +14,20 @@ class PacienteController extends Controller
      */
     public function index()
     {
-        $paciente = Paciente::all();
+        $perPage = \Request::query('per_page', 10);
+        $currentPage = \Request::query('page', 1);
+        // $searchTerm = \Request::query('search', '');
+
+        $paciente = Paciente::orderBy('created_at', 'desc');
+
+        // if (!empty($searchTerm)) {
+        //     $paciente->where(function($q) use ($searchTerm) {
+        //         $q->where('nombre', 'LIKE', "%$searchTerm%");
+        //     });
+        // }
+
+        $paciente = $paciente->paginate($perPage, ['*'], 'page', $currentPage);
+
         if ($paciente->isEmpty()){
             return response()->json(['message' => 'No se encontraron pacientes']);
         }
