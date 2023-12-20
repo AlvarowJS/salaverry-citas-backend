@@ -19,6 +19,7 @@ class Cita extends Model
         'fecha',
         'silla',
         'hora',
+        'pago',
         'confirmar',
         'llego',
         'entro',
@@ -26,7 +27,7 @@ class Cita extends Model
         'paciente_id',
         'consultorio_id',
         'medico_id',
-        'pago_id',
+        'pago_tipo_id',
         'estado_id',
     ];
 
