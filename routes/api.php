@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\PacienteController as Paciente;
 use App\Http\Controllers\Api\V1\UbicacionController as Ubicacion;
 use App\Http\Controllers\Api\V1\ConsultorioController as Consultorio;
 use App\Http\Controllers\Api\V1\PagoController as Pago;
+use App\Http\Controllers\Api\V1\UserController as User;
 
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('/v1/ubicacion', Ubicacion::class);
     Route::apiResource('/v1/consultorio', Consultorio::class);
     Route::apiResource('/v1/pagos', Pago::class);
-    
+    Route::apiResource('/v1/users', User::class);
 
 });
