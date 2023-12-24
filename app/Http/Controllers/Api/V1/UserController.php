@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -26,7 +28,18 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = User::create([
+            'nombres' => $request->nombres,
+            'apellidos' => $request->apellidos,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role_id' => 2,
+            'status' => true
+        ]);
+        return response()->json([
+            'message' => 'Usuario creado exitosamente.',
+            'user' => $user,
+        ], 201);
     }
 
     /**
