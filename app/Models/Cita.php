@@ -38,9 +38,9 @@ class Cita extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'fecha' => 'date',
+        // 'fecha' => 'date',
         'silla' => 'boolean',
-        'hora' => 'datetime',
+        // 'hora' => 'datetime',
         'confirmar' => 'boolean',
         'llego' => 'boolean',
         'entro' => 'boolean',
@@ -48,7 +48,7 @@ class Cita extends Model
         'paciente_id' => 'integer',
         'consultorio_id' => 'integer',
         'medico_id' => 'integer',
-        'pago_id' => 'integer',
+        'pago_tipo_id' => 'integer',
         'estado_id' => 'integer',
     ];
 
@@ -72,9 +72,9 @@ class Cita extends Model
         return $this->belongsTo(Medico::class);
     }
 
-    public function pago(): BelongsTo
+    public function pagoTipo(): BelongsTo
     {
-        return $this->belongsTo(Pago::class);
+        return $this->belongsTo(PagoTipo::class);
     }
 
     public function estado(): BelongsTo

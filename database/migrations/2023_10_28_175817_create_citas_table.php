@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('citas', function (Blueprint $table) {
             $table->id();
             $table->date('fecha');
-            $table->boolean('silla');
-            $table->string('pago');
-            $table->dateTime('hora');
-            $table->boolean('confirmar');
-            $table->boolean('llego');
-            $table->boolean('entro');
+            $table->boolean('silla')->nullable();
+            $table->string('pago')->nullable();
+            $table->time('hora')->nullable();
+            $table->boolean('confirmar')->nullable();
+            $table->boolean('llego')->nullable();
+            $table->boolean('entro')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('paciente_id')->nullable();
             $table->unsignedBigInteger('consultorio_id')->nullable();

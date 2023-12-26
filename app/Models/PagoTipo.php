@@ -28,8 +28,8 @@ class PagoTipo extends Model
         'id' => 'integer',
     ];
 
-    public function pagos(): HasMany
+    public function cita(): HasMany
     {
-        return $this->hasMany(Pago::class);
+        return $this->hasMany(Cita::class);
     }
 }

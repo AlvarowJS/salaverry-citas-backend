@@ -61,7 +61,19 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json(['message' => 'Registro no encontrado'], 404);
+        }
+        $user->nombres = $request->nombres;
+        $user->apellidos = $request->apellidos;
+        $user->email = $request->email;
+        $user->status = $request->status;
+        $user->password = Hash::make($request->password);
+        $user->save();
+        return response()->json($user);
+
+
     }
 
     /**
@@ -69,6 +81,11 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $datos = User::find($id);
+        if (!$datos) {
+            return response()->json(['message' => 'Registro no encontrado'], 404);
+        }
+        $datos->delete();
+        return response()->json(['message' => 'Registro eliminado']);
     }
 }
