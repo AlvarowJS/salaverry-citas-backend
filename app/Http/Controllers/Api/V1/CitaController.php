@@ -18,7 +18,7 @@ class CitaController extends Controller
         $datePage = \Request::query('date', '');
         $datos = Medico::with(['citas' => function ($query) use ($datePage) {
             $query->whereDate('fecha', $datePage);
-        }, 'citas.paciente', 'citas.pagotipo'])
+        }, 'citas.paciente', 'citas.pagotipo', 'citas.consultorio'])
             ->get();
 
         return response()->json($datos);
@@ -57,7 +57,12 @@ class CitaController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $datos = Cita::find($id);
+        
+        if (!$datos) {
+            return response()->json(['message' => 'Registro no encontrado'], Response::HTTP_NOT_FOUND);
+        }
+        return response()->json($datos);
     }
 
     /**
@@ -73,6 +78,12 @@ class CitaController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $datos = Cita::find($id);
+
+        if (!$datos) {
+            return response()->json(['message' => 'Registro no encontrado'], 404);
+        }
+        $datos->delete();
+        return response()->json(['message' => 'Registro eliminado']);
     }
 }

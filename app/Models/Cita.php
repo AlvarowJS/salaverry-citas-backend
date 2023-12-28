@@ -23,11 +23,12 @@ class Cita extends Model
         'confirmar',
         'llego',
         'entro',
+        'observacion',
         'user_id',
         'paciente_id',
         'consultorio_id',
         'medico_id',
-        'pago_tipo_id',
+        'pago_tipo_id',        
         'estado_id',
     ];
 

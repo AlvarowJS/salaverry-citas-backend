@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->date('fecha');
             $table->boolean('silla')->nullable();
-            $table->string('pago')->nullable();
+            $table->double('pago')->nullable();
+            $table->text('observacion')->nullable();
             $table->time('hora')->nullable();
             $table->boolean('confirmar')->nullable();
             $table->boolean('llego')->nullable();
