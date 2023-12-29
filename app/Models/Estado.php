@@ -17,6 +17,7 @@ class Estado extends Model
      */
     protected $fillable = [
         'nombre_estado',
+        'signo_estado',
     ];
 
     /**
