@@ -21,6 +21,7 @@ class Medico extends Model
         'apellido_paterno',
         'apellido_materno',
         'status',
+        'consultorio_id',
     ];
 
     /**
@@ -36,6 +37,11 @@ class Medico extends Model
     public function citas(): HasMany
     {
         return $this->hasMany(Cita::class);
+    }
+
+    public function consultorio(): BelongsTo
+    {
+        return $this->belongsTo(Consultorio::class);
     }
 
 }

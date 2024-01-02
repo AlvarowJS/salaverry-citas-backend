@@ -23,10 +23,10 @@ return new class extends Migration
             $table->string('entro')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('paciente_id')->nullable();
-            $table->unsignedBigInteger('consultorio_id')->nullable();
+            // $table->unsignedBigInteger('consultorio_id')->nullable();
             $table->unsignedBigInteger('medico_id')->nullable();
             $table->unsignedBigInteger('pago_tipo_id')->nullable();
-            $table->unsignedBigInteger('estado_id')->nullable();
+            // $table->unsignedBigInteger('estado_id')->nullable();
             $table->timestamps();
         });
     }

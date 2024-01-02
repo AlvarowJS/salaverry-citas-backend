@@ -14,7 +14,7 @@ class MedicoController extends Controller
      */
     public function index()
     {
-        $medicos = Medico::all();
+        $medicos = Medico::with('consultorio')->get();
         if ($medicos->isEmpty()) {
             return response()->json(['message' => 'No se encontraron medicos'], Response::HTTP_NOT_FOUND);
         }
@@ -36,6 +36,7 @@ class MedicoController extends Controller
             'nombre' => $request->nombre,
             'apellido_paterno' => $request->apellido_paterno,
             'apellido_materno' => $request->apellido_materno,
+            'consultorio_id' => $request->consultorio_id,
             'status' => true
         ]);
 
@@ -66,6 +67,7 @@ class MedicoController extends Controller
         $medico->nombre = $request->nombre;
         $medico->apellido_paterno = $request->apellido_paterno;
         $medico->apellido_materno = $request->apellido_materno;
+        $medico->consultorio_id = $request->consultorio_id;
         $medico->status = $request->status;
         $medico->save();
         return response()->json($medico);

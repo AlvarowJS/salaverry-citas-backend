@@ -18,7 +18,7 @@ class CitaController extends Controller
         $datePage = \Request::query('date', '');
         $datos = Medico::with(['citas' => function ($query) use ($datePage) {
             $query->whereDate('fecha', $datePage);
-        }, 'citas.paciente', 'citas.pagotipo', 'citas.consultorio'])
+        }, 'citas.paciente', 'citas.pagotipo', 'consultorio'])
             ->get();
 
         return response()->json($datos);
@@ -44,7 +44,7 @@ class CitaController extends Controller
             'entro' => $request->entro,
             'user_id' => $request->user_id,
             'paciente_id' => $request->paciente_id,
-            'consultorio_id' => $request->consultorio_id,
+            // 'consultorio_id' => $request->consultorio_id,
             'medico_id' => $request->medico_id,
             'pago_tipo_id' => $request->pago_tipo_id,
         ]);
@@ -58,7 +58,7 @@ class CitaController extends Controller
     public function show(string $id)
     {
         $datos = Cita::find($id);
-        
+
         if (!$datos) {
             return response()->json(['message' => 'Registro no encontrado'], Response::HTTP_NOT_FOUND);
         }

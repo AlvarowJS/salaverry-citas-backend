@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('medicos', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('consultorio_id')->nullable()->constrained('consultorios');
             $table->string('nombre');
             $table->string('apellido_paterno');
             $table->string('apellido_materno');
