@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cita;
-use App\Models\Medico;
+use App\Models\Multiuso;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class CitaController extends Controller
+class MultiusoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,10 +16,10 @@ class CitaController extends Controller
     public function index()
     {
         $datePage = \Request::query('date', '');
-        $datos = Medico::with(['citas' => function ($query) use ($datePage) {
+        $datos = Multiuso::with(['citas' => function ($query) use ($datePage) {
             $query->whereDate('fecha', $datePage)
-                ->where('multiuso', false);
-        }, 'citas.paciente', 'citas.pagotipo', 'consultorio'])
+                ->where('multiuso', true);
+        }, 'citas.paciente', 'citas.medico', 'citas.pagotipo'])
             ->get();
 
         return response()->json($datos);
@@ -30,27 +30,23 @@ class CitaController extends Controller
      */
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'fecha' => 'required|date',
-        //     'hora' => 'required|time',
-        // ]);
-
-        $cita = Cita::create([
+        $multiuso = Cita::create([
             'fecha' => $request->fecha,
             'silla' => $request->silla,
             'pago' => $request->pago,
             'hora' => $request->hora,
             'confirmar' => $request->confirmar,
-            'multiuso' => 0,
+            'multiuso' => 1,
             'llego' => $request->llego,
             'entro' => $request->entro,
             'user_id' => $request->user_id,
             'paciente_id' => $request->paciente_id,
             'medico_id' => $request->medico_id,
+            'multiuso_id' => $request->multiuso_id,
             'pago_tipo_id' => $request->pago_tipo_id,
         ]);
 
-        return response()->json($cita, Response::HTTP_CREATED);
+        return response()->json($multiuso, Response::HTTP_CREATED);
     }
 
     /**

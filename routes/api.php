@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\PagoController as Pago;
 use App\Http\Controllers\Api\V1\UserController as User;
 use App\Http\Controllers\Api\V1\CitaController as Cita;
 use App\Http\Controllers\Api\V1\EstadoController as Estado;
+use App\Http\Controllers\Api\V1\MultiusoController as Multiuso;
 
 use Illuminate\Support\Facades\Route;
 
@@ -27,5 +28,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('/v1/users', User::class);
     Route::apiResource('/v1/citas', Cita::class);
     Route::apiResource('/v1/estados', Estado::class);
+    Route::apiResource('/v1/multiusos', Multiuso::class);
 
 });

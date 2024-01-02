@@ -1,64 +1,68 @@
 models:
-  Paciente:
-    nombre: string
-    apellido_materno: string unique
-    apellido_paterno: longtext
-    telefono: string
-    relationships:
-      hasMany: Cita
+  # Paciente:
+  #   nombre: string
+  #   apellido_materno: string unique
+  #   apellido_paterno: longtext
+  #   telefono: string
+  #   relationships:
+  #     hasMany: Cita
 
-  Ubicacion:
-    nombre_ubicacion: string
-    relationships:
-      hasMany: Consultorio
-  Consultorio:
-    numero_consultorio: string
-    ubicacion_id: id
-    relationships:
-      hasMany: Cita
+  # Ubicacion:
+  #   nombre_ubicacion: string
+  #   relationships:
+  #     hasMany: Consultorio
+  # Consultorio:
+  #   numero_consultorio: string
+  #   ubicacion_id: id
+  #   relationships:
+  #     hasMany: Cita
 
-  Pago_tipo:
-    tipoPago: string
-    relationships:
-      hasMany: Pago
-  Pago:
-    monto: float
-    pago_tipo_id: id
-    relationships:
-      hasMany: Cita
+  # Pago_tipo:
+  #   tipoPago: string
+  #   relationships:
+  #     hasMany: Pago
+  # Pago:
+  #   monto: float
+  #   pago_tipo_id: id
+  #   relationships:
+  #     hasMany: Cita
 
-  Medico:
-    nombre: string
-    apellido_paterno: string
-    apellido_materno: string
-    status: boolean
-    relationships:
-      hasMany: Cita
+  # Medico:
+  #   nombre: string
+  #   apellido_paterno: string
+  #   apellido_materno: string
+  #   status: boolean
+  #   relationships:
+  #     hasMany: Cita
 
-  Estado:
-    nombre_estado: string
-    relationships:
-      hasMany: Cita
+  # Estado:
+  #   nombre_estado: string
+  #   relationships:
+  #     hasMany: Cita
 
-  Cita:
-    fecha: date
-    silla: boolean
-    hora: datetime
-    confirmar: boolean
-    llego: boolean
-    entro: boolean
-    user_id: id
-    paciente_id: id
-    consultorio_id: id
-    medico_id: id
-    pago_id: id
-    estado_id: id
+  # Cita:
+  #   fecha: date
+  #   silla: boolean
+  #   hora: datetime
+  #   confirmar: boolean
+  #   llego: boolean
+  #   entro: boolean
+  #   user_id: id
+  #   paciente_id: id
+  #   consultorio_id: id
+  #   medico_id: id
+  #   pago_id: id
+  #   estado_id: id
 
-  Role:
-    name: string
-    description: string
-    relationships:
-      hasMany: User
+  # Role:
+  #   name: string
+  #   description: string
+  #   relationships:
+  #     hasMany: User
+
+  Multiuso:
+    nombre_multiuso: string
+    estado: boolean
 
 
 controllers:

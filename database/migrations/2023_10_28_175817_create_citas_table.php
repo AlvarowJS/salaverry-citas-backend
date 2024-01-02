@@ -19,8 +19,11 @@ return new class extends Migration
             $table->text('observacion')->nullable();
             $table->time('hora')->nullable();
             $table->boolean('confirmar')->nullable();
+            $table->boolean('multiuso')->nullable();
             $table->string('llego')->nullable();
             $table->string('entro')->nullable();
+            
+            $table->foreignId('multiuso_id')->nullable()->constrained('multiusos');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('paciente_id')->nullable();
             // $table->unsignedBigInteger('consultorio_id')->nullable();

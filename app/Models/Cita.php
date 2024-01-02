@@ -30,6 +30,8 @@ class Cita extends Model
         'medico_id',
         'pago_tipo_id',        
         'estado_id',
+        'multiuso',
+        'multiuso_id',
     ];
 
     /**
@@ -43,14 +45,14 @@ class Cita extends Model
         'silla' => 'boolean',
         // 'hora' => 'datetime',
         'confirmar' => 'boolean',
-        'llego' => 'boolean',
-        'entro' => 'boolean',
+        'multiuso' => 'boolean',
         'user_id' => 'integer',
         'paciente_id' => 'integer',
         'consultorio_id' => 'integer',
         'medico_id' => 'integer',
         'pago_tipo_id' => 'integer',
         'estado_id' => 'integer',
+        'multiuso_id' => 'integer'
     ];
 
     public function user(): BelongsTo

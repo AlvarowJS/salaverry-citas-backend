@@ -14,7 +14,7 @@ class MedicoController extends Controller
      */
     public function index()
     {
-        $medicos = Medico::with('consultorio')->get();
+        $medicos = Medico::with('consultorio', 'consultorio.ubicacion')->get();
         if ($medicos->isEmpty()) {
             return response()->json(['message' => 'No se encontraron medicos'], Response::HTTP_NOT_FOUND);
         }
