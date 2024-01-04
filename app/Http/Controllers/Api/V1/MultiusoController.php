@@ -16,10 +16,15 @@ class MultiusoController extends Controller
     public function index()
     {
         $datePage = \Request::query('date', '');
-        $datos = Multiuso::with(['citas' => function ($query) use ($datePage) {
-            $query->whereDate('fecha', $datePage)
-                ->where('multiuso', true);
-        }, 'citas.paciente', 'citas.medico', 'citas.pagotipo'])
+        $datos = Multiuso::with([
+            'citas' => function ($query) use ($datePage) {
+                $query->whereDate('fecha', $datePage)
+                    ->where('multiuso', true);
+            },
+            'citas.paciente',
+            'citas.medico',
+            'citas.pagotipo'
+        ])
             ->get();
 
         return response()->json($datos);
@@ -36,7 +41,7 @@ class MultiusoController extends Controller
         if ($existingCita) {
             return response()->json(['error' => 'La cita ya existe para esta fecha y hora.'], Response::HTTP_CONFLICT);
         }
-        
+
         $multiuso = Cita::create([
             'fecha' => $request->fecha,
             'silla' => $request->silla,
@@ -79,7 +84,13 @@ class MultiusoController extends Controller
             return response()->json(['message' => 'Registro no encontrado'], 404);
         }
 
-        
+        $existingCita = Cita::where('fecha', $request->fecha)
+            ->where('hora', $request->hora)
+            ->where('medico_id', $request->medico_id)
+            ->first();
+        if ($existingCita) {
+            return response()->json(['error' => 'La cita ya existe para esta fecha y hora.'], Response::HTTP_CONFLICT);
+        }
         $cita->fecha = $request->fecha;
         $cita->silla = $request->silla;
         $cita->pago = $request->pago;

@@ -16,10 +16,15 @@ class CitaController extends Controller
     public function index()
     {
         $datePage = \Request::query('date', '');
-        $datos = Medico::with(['citas' => function ($query) use ($datePage) {
-            $query->whereDate('fecha', $datePage)
-                ->where('multiuso', false);
-        }, 'citas.paciente', 'citas.pagotipo', 'consultorio'])
+        $datos = Medico::with([
+            'citas' => function ($query) use ($datePage) {
+                $query->whereDate('fecha', $datePage)
+                    ->where('multiuso', false);
+            },
+            'citas.paciente',
+            'citas.pagotipo',
+            'consultorio'
+        ])
             ->get();
 
         return response()->json($datos);
@@ -34,10 +39,10 @@ class CitaController extends Controller
             ->where('hora', $request->hora)
             ->where('medico_id', $request->medico_id)
             ->first();
-            if ($citaExistente) {
-                // Si ya existe una cita, retornar un error 409
-                return response()->json(['error' => 'La cita ya está registrada para esta hora y fecha con el médico correspondiente.'], Response::HTTP_CONFLICT);
-            }
+        if ($citaExistente) {
+            // Si ya existe una cita, retornar un error 409
+            return response()->json(['error' => 'La cita ya está registrada para esta hora y fecha con el médico correspondiente.'], Response::HTTP_CONFLICT);
+        }
 
         $cita = Cita::create([
             'fecha' => $request->fecha,
@@ -80,28 +85,37 @@ class CitaController extends Controller
         if (!$cita) {
             return response()->json(['message' => 'Registro no encontrado'], 404);
         }
-
-        $existingCita = Cita::where('fecha', $request->fecha)
-            ->where('hora', $request->hora)
-            ->first();
-        if ($existingCita) {
-            return response()->json(['error' => 'La cita ya existe para esta fecha y hora.'], Response::HTTP_CONFLICT);
-        }
-
-        $cita->fecha = $request->fecha;
         $cita->silla = $request->silla;
         $cita->pago = $request->pago;
-        $cita->hora = $request->hora;
         $cita->confirmar = $request->confirmar;
         $cita->multiuso = false;
         $cita->llego = $request->llego;
         $cita->entro = $request->entro;
         $cita->user_id = $request->user_id;
         $cita->paciente_id = $request->paciente_id;
-        $cita->medico_id = $request->medico_id;
         $cita->pago_tipo_id = $request->pago_tipo_id;
+
+        if (
+            $cita->fecha != $request->fecha &&
+            $cita->hora != $request->hora &&
+            $cita->medico_id != $request->medico_id
+        ) {
+            $cita->fecha = $request->fecha;
+            $cita->medico_id = $request->medico_id;
+            $cita->hora = $request->hora;
+        } else {
+            $existingCita = Cita::where('fecha', $request->fecha)
+                ->where('hora', $request->hora)
+                ->where('medico_id', $request->medico_id)
+                ->first();
+            if ($existingCita) {
+                return response()->json(['error' => 'La cita ya existe para esta fecha y hora.'], Response::HTTP_CONFLICT);
+            }
+        }
+        return $cita;
         $cita->save();
         return response()->json($cita);
+
     }
 
     /**
