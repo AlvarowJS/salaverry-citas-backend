@@ -30,6 +30,13 @@ class MultiusoController extends Controller
      */
     public function store(Request $request)
     {
+        $existingCita = Cita::where('fecha', $request->fecha)
+            ->where('hora', $request->hora)
+            ->first();
+        if ($existingCita) {
+            return response()->json(['error' => 'La cita ya existe para esta fecha y hora.'], Response::HTTP_CONFLICT);
+        }
+        
         $multiuso = Cita::create([
             'fecha' => $request->fecha,
             'silla' => $request->silla,
@@ -54,7 +61,7 @@ class MultiusoController extends Controller
      */
     public function show(string $id)
     {
-        $datos = Cita::find($id);
+        $datos = Cita::with('paciente')->find($id);
 
         if (!$datos) {
             return response()->json(['message' => 'Registro no encontrado'], Response::HTTP_NOT_FOUND);
@@ -67,7 +74,26 @@ class MultiusoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $cita = Cita::find($id);
+        if (!$cita) {
+            return response()->json(['message' => 'Registro no encontrado'], 404);
+        }
+
+        
+        $cita->fecha = $request->fecha;
+        $cita->silla = $request->silla;
+        $cita->pago = $request->pago;
+        $cita->hora = $request->hora;
+        $cita->confirmar = $request->confirmar;
+        $cita->multiuso = true;
+        $cita->llego = $request->llego;
+        $cita->entro = $request->entro;
+        $cita->user_id = $request->user_id;
+        $cita->paciente_id = $request->paciente_id;
+        $cita->medico_id = $request->medico_id;
+        $cita->pago_tipo_id = $request->pago_tipo_id;
+        $cita->save();
+        return response()->json($cita);
     }
 
     /**

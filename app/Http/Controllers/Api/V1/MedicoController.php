@@ -6,9 +6,23 @@ use App\Http\Controllers\Controller;
 use App\Models\Medico;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class MedicoController extends Controller
 {
+    public function pacienteCita()
+    {
+        $datePage = \Request::query('date', '');
+        $citas = DB::table('citas')
+            ->select('citas.*', 'pacientes.nombre')
+            ->join('medicos', 'citas.medico_id', '=', 'medicos.id')
+            ->where('citas.fecha', '=', $datePage)
+            ->orderBy('citas.fecha', 'asc')
+            ->get();
+
+        return response()->json($citas);
+
+    }
     /**
      * Display a listing of the resource.
      */
@@ -85,4 +99,6 @@ class MedicoController extends Controller
         $datos->delete();
         return response()->json(['message' => 'Registro eliminado']);
     }
+
+
 }
