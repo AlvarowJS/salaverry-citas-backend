@@ -50,6 +50,7 @@ class CitaController extends Controller
             'pago' => $request->pago,
             'hora' => $request->hora,
             'confirmar' => $request->confirmar,
+            'observacion' => $request->observacion,
             'multiuso' => 0,
             'llego' => $request->llego,
             'entro' => $request->entro,
@@ -81,39 +82,48 @@ class CitaController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        // $cita = Cita::find($id);
+        // if (!$cita) {
+        //     return response()->json(['message' => 'Registro no encontrado'], 404);
+        // }
+        // $cita->silla = $request->silla;
+        // $cita->pago = $request->pago;
+        // $cita->confirmar = $request->confirmar;
+        // $cita->multiuso = false;
+        // $cita->llego = $request->llego;
+        // $cita->observacion = $request->observacion;
+        // $cita->entro = $request->entro;
+        // $cita->user_id = $request->user_id;
+        // $cita->paciente_id = $request->paciente_id;
+        // $cita->pago_tipo_id = $request->pago_tipo_id;
+
+        // $cita->fecha = $request->fecha;
+        // $cita->medico_id = $request->medico_id;
+        // $cita->hora = $request->hora;
+
+        // $cita->save();
+        // return response()->json($cita);
         $cita = Cita::find($id);
+
         if (!$cita) {
             return response()->json(['message' => 'Registro no encontrado'], 404);
         }
-        $cita->silla = $request->silla;
-        $cita->pago = $request->pago;
-        $cita->confirmar = $request->confirmar;
-        $cita->multiuso = false;
-        $cita->llego = $request->llego;
-        $cita->entro = $request->entro;
-        $cita->user_id = $request->user_id;
-        $cita->paciente_id = $request->paciente_id;
-        $cita->pago_tipo_id = $request->pago_tipo_id;
 
-        if (
-            $cita->fecha != $request->fecha &&
-            $cita->hora != $request->hora &&
-            $cita->medico_id != $request->medico_id
-        ) {
-            $cita->fecha = $request->fecha;
-            $cita->medico_id = $request->medico_id;
-            $cita->hora = $request->hora;
-        } else {
-            $existingCita = Cita::where('fecha', $request->fecha)
-                ->where('hora', $request->hora)
-                ->where('medico_id', $request->medico_id)
-                ->first();
-            if ($existingCita) {
-                return response()->json(['error' => 'La cita ya existe para esta fecha y hora.'], Response::HTTP_CONFLICT);
-            }
+        // Comprueba si hay otra cita con la misma fecha y hora para el mismo médico
+        $existingCita = Cita::where('fecha', $request->fecha)
+            ->where('hora', $request->hora)
+            ->where('medico_id', $request->medico_id)
+            ->where('id', '<>', $id) // Excluye la cita actual para permitir la actualización
+            ->first();
+
+        if ($existingCita) {
+            return response()->json(['error' => 'Ya existe una cita para esta fecha y hora con el mismo médico.'], 409);
         }
-        return $cita;
-        $cita->save();
+
+        // Actualiza los campos
+        $cita->update($request->all());
+        // $cita->update($request->except('fecha', 'hora'));
+
         return response()->json($cita);
 
     }

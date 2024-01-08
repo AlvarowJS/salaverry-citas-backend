@@ -3,12 +3,24 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cita;
 use App\Models\Paciente;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class PacienteController extends Controller
 {
+
+    public function pacienteCita(string $id)
+    {
+        $citas = Cita::with(['medico.consultorio', 'paciente', 'pagotipo'])
+            ->where('paciente_id', $id)
+            ->orderBy('fecha', 'desc')
+            ->get();
+        return response()->json($citas);
+
+    }
     /**
      * Display a listing of the resource.
      */
@@ -28,7 +40,7 @@ class PacienteController extends Controller
 
         // $paciente = $paciente->paginate($perPage, ['*'], 'page', $currentPage);
 
-        if ($paciente->isEmpty()){
+        if ($paciente->isEmpty()) {
             return response()->json(['message' => 'No se encontraron pacientes']);
         }
         return response()->json(['data' => $paciente]);

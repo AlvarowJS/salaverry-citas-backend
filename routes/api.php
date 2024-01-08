@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/token-auth', [Auth::class, 'authToken']);
     Route::apiResource('/v1/medicos', Medico::class);
     Route::apiResource('/v1/pacientes', Paciente::class);
+    Route::get('/v1/paciente-citas/{id}', [Paciente::class, 'pacienteCita']);
     Route::apiResource('/v1/ubicacion', Ubicacion::class);
     Route::apiResource('/v1/consultorio', Consultorio::class);
     Route::apiResource('/v1/pagos', Pago::class);
@@ -29,7 +30,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('/v1/citas', Cita::class);
     Route::apiResource('/v1/estados', Estado::class);
     Route::apiResource('/v1/multiusos', Multiuso::class);
-    
-    Route::get('/v1/paciente-citas', [Medico::class, 'pacienteCita']);
+
+    // Route::get('/v1/paciente-citas', [Medico::class, 'pacienteCita']);
 
 });
+Route::get('/v1/medico-citas', [Medico::class, 'medicoCita']);
