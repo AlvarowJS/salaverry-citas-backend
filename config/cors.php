@@ -18,13 +18,14 @@ return [
     // 'paths' => ['api/*', 'sanctum/csrf-cookie'],
     'paths' => ['api/*'],
 
-    'allowed_methods' => ['*'],
+    // 'allowed_methods' => ['*'],
+    'allowed_methods' => ['POST', 'GET', 'DELETE', 'PUT', '*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => ['https://tms2.nuvola7.com.mx','*'],
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['*'],
+    'allowed_headers' => ['X-Custom-Header', 'Upgrade-Insecure-Requests', '*'],
 
     'exposed_headers' => [],
 
