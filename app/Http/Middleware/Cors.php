@@ -4,6 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+
 class Cors
 {
     /**
@@ -15,10 +19,18 @@ class Cors
      */
     public function handle($request, Closure $next)
     {
+        // return $next($request)
+        //     ->header("Access-Control-Allow-Origin", "*")
+        //     ->header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS")
+        //     ->header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, X-Token-Auth, Authorization");
         $response = $next($request);
-        $response->header('Access-Control-Allow-Origin', '*');
-        $response->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-        $response->header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+        // Verifica si la respuesta es un BinaryFileResponse
+        if (!($response instanceof BinaryFileResponse)) {
+            $response->header("Access-Control-Allow-Origin", "*")
+                ->header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS")
+                ->header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, X-Token-Auth, Authorization");
+        }
 
         return $response;
     }
