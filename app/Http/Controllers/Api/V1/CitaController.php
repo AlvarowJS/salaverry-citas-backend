@@ -4,12 +4,46 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cita;
+use App\Models\Consultorio;
+use App\Models\Estado;
 use App\Models\Medico;
+use App\Models\Paciente;
+use App\Models\PagoTipo;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class CitaController extends Controller
 {
+
+    public function mostrarSelects()
+    {
+        $consultorios = Consultorio::all();
+        $pacientes = Paciente::all();
+        $pagos = PagoTipo::all();
+        $estados = Estado::all();
+        $medicos = Medico::all();
+
+        $citas = Cita::where('paciente_id', 1)
+              ->where('medico_id', 1)
+              ->get();
+
+        return $citas;
+
+        return response ()->json([
+            "consultorios"=> $consultorios,
+            "pacientes"=> $pacientes,
+            "pagos"=> $pagos,
+            "estados"=> $estados,
+            "medicos"=> $medicos
+        ]);
+    }
+    public function confirmarCita(Request $request, string $id)
+    {
+        $datos = Cita::find($id);
+        $datos->confirmar = $request->confirmar;
+        $datos->save();
+        return response()->json($datos);
+    }
     /**
      * Display a listing of the resource.
      */
@@ -19,7 +53,8 @@ class CitaController extends Controller
         $datos = Medico::with([
             'citas' => function ($query) use ($datePage) {
                 $query->whereDate('fecha', $datePage)
-                    ->where('multiuso', false);
+                    ->where('multiuso', false)
+                    ->orderBy('hora');
             },
             'citas.paciente',
             'citas.pagotipo',
@@ -125,7 +160,6 @@ class CitaController extends Controller
         // $cita->update($request->except('fecha', 'hora'));
 
         return response()->json($cita);
-
     }
 
     /**

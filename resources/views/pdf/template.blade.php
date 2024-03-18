@@ -41,10 +41,19 @@
     tr:nth-child(even) {
         background-color: #f9f9f9;
     }
+    .logo-img{
+        width: 100px;
+        height: 100px;
+        float: right;
+    }
+    .observacion {
+    width: 300px; /* O cualquier otro ancho que desees */
+}
 </style>
 
 <body>
     <header>
+    <img src="{{ public_path('images/logo.png') }}" class="logo-img" alt="Logo">
         <h2>
             Historias de Citas del Médico
             {{ $medico[0]->nombre }} {{ $medico[0]->apellido_paterno }} {{ $medico[0]->apellido_materno }}
@@ -63,8 +72,8 @@
                 <th>Fecha</th>
                 <th>Hora</th>
                 <th>Observacion</th>
-                <th>Multiuso</th>
                 <th>Paciente</th>
+                <th>Tipo de pago</th>
                 <th>Pago</th>
 
             </tr>
@@ -72,9 +81,10 @@
                 <tr>
                     <td>{{ $cita->fecha }}</td>
                     <td>{{ $cita->hora }}</td>
-                    <td>{{ $cita->observacion }}</td>
-                    <td>{{ $cita->multiuso ? 'Si' : 'No' }}</td>
+                    <td class="observacion">{{ $cita->observacion }}</td>
+                    <!-- <td>{{ $cita->multiuso ? 'Si' : 'No' }}</td> -->
                     <td>{{ $cita->nombre }} {{ $cita->apellido_paterno }} {{ $cita->apellido_materno }}</td>
+                    <td>{{ $cita->tipoPago }}</td>
                     <td>$ {{ $cita->pago }}</td>
                 </tr>
             @endforeach

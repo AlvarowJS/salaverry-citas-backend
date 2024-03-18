@@ -35,23 +35,25 @@ class MedicoController extends Controller
                 DB::raw("DATE_FORMAT(citas.fecha, '%d-%m-%Y') AS fecha"),
                 'pacientes.nombre',
                 'pacientes.apellido_paterno',
-                'pacientes.apellido_materno'
+                'pacientes.apellido_materno',
+                'pago_tipos.tipoPago'
             )
             ->join('pacientes', 'citas.paciente_id', '=', 'pacientes.id')
             ->join('medicos', 'citas.medico_id', '=', 'medicos.id')
+            ->join('pago_tipos', 'citas.pago_tipo_id', '=', 'pago_tipos.id')
             // ->where('citas.fecha', '=', $datePage)
             ->where('citas.fecha', '>=', $startDate)
             ->where('citas.fecha', '<=', $endDate)
             ->where('citas.medico_id', '=', $medicoId)
             ->orderBy('citas.hora', 'asc')
             ->get();
-
+        // $tipoPago = DB::table('pago_tipos')
         $sumaTotal = DB::table('citas')
             ->where('fecha', '>=', $startDate)
             ->where('fecha', '<=', $endDate)
             ->where('medico_id', '=', $medicoId)
             ->sum('pago');
-        // return [$citas, $medico, $fecha, $sumaTotal];
+        // return [$citas, $medico,$fechaInicio, $fechaFin, $sumaTotal];
         $pdf = Pdf::loadView(
             'pdf.template',
             compact('citas', 'fechaInicio', 'fechaFin', 'medico', 'sumaTotal')

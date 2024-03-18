@@ -28,9 +28,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('/v1/pagos', Pago::class);
     Route::apiResource('/v1/users', User::class);
     Route::apiResource('/v1/citas', Cita::class);
+    Route::get('/v1/citas-selects', [Cita::class, 'mostrarSelects']);
     Route::apiResource('/v1/estados', Estado::class);
     Route::apiResource('/v1/multiusos', Multiuso::class);
-
+    
     // Route::get('/v1/paciente-citas', [Medico::class, 'pacienteCita']);
 
 });
