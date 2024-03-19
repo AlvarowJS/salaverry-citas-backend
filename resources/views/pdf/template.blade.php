@@ -14,7 +14,7 @@
         margin: 0;
         padding: 0;
         color: #333333;
-
+        
     }
 
     header {
@@ -25,6 +25,7 @@
         width: 100%;
         border-collapse: collapse;
         margin-bottom: 20px;
+        font-size: 10px;
     }
 
     th,
@@ -71,6 +72,7 @@
             <tr>
                 <th>Fecha</th>
                 <th>Hora</th>
+                <th>Visita</th>
                 <th>Observacion</th>
                 <th>Paciente</th>
                 <th>Tipo de pago</th>
@@ -81,6 +83,7 @@
                 <tr>
                     <td>{{ $cita->fecha }}</td>
                     <td>{{ $cita->hora }}</td>
+                    <td>{{ $cita->llego }}</td>
                     <td class="observacion">{{ $cita->observacion }}</td>
                     <!-- <td>{{ $cita->multiuso ? 'Si' : 'No' }}</td> -->
                     <td>{{ $cita->nombre }} {{ $cita->apellido_paterno }} {{ $cita->apellido_materno }}</td>
@@ -89,6 +92,7 @@
                 </tr>
             @endforeach
                 <tr>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>

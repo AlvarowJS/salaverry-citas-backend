@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('/v1/users', User::class);
     Route::apiResource('/v1/citas', Cita::class);
     Route::get('/v1/citas-selects', [Cita::class, 'mostrarSelects']);
+    Route::get('/v1/citas-visitas', [Cita::class, 'confirmarVisita']);
     Route::apiResource('/v1/estados', Estado::class);
     Route::apiResource('/v1/multiusos', Multiuso::class);
     

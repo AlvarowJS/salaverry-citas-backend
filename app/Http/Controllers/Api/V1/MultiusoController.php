@@ -7,6 +7,7 @@ use App\Models\Cita;
 use App\Models\Multiuso;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Carbon\Carbon;
 
 class MultiusoController extends Controller
 {
@@ -35,30 +36,60 @@ class MultiusoController extends Controller
      */
     public function store(Request $request)
     {
-        $existingCita = Cita::where('fecha', $request->fecha)
-            ->where('hora', $request->hora)
-            ->first();
-        if ($existingCita) {
-            return response()->json(['error' => 'La cita ya existe para esta fecha y hora.'], Response::HTTP_CONFLICT);
+        $horaSolicitud = Carbon::createFromFormat('H:i', $request->hora);
+        $inicioVentanaPermitida = Carbon::createFromFormat('H:i', '06:00');
+        $finVentanaPermitida = Carbon::createFromFormat('H:i', '06:59');
+
+        if ($horaSolicitud->between($inicioVentanaPermitida, $finVentanaPermitida, true)) {
+            $multiuso = Cita::create([
+                'fecha' => $request->fecha,
+                'silla' => $request->silla,
+                'pago' => $request->pago,
+                'hora' => $request->hora,
+                'confirmar' => $request->confirmar,
+                'observacion' => $request->observacion,
+                'multiuso' => 1,
+                'llego' => $request->llego,
+                'entro' => $request->entro,
+                'user_id' => $request->user_id,
+                'paciente_id' => $request->paciente_id,
+                'medico_id' => $request->medico_id,
+                'multiuso_id' => $request->multiuso_id,
+                'pago_tipo_id' => $request->pago_tipo_id,
+            ]);
+
+            return response()->json($multiuso, Response::HTTP_CREATED);
+        } else {
+            $existingCita = Cita::where('fecha', $request->fecha)
+                ->where('hora', $request->hora)
+                ->where('medico_id', $request->medico_id)
+                ->where('paciente_id', $request->paciente_id)
+                ->first();
+            if ($existingCita) {
+                return response()->json(['error' => 'La cita ya existe para esta fecha y hora.'], Response::HTTP_CONFLICT);
+            }
+
+            $multiuso = Cita::create([
+                'fecha' => $request->fecha,
+                'silla' => $request->silla,
+                'pago' => $request->pago,
+                'hora' => $request->hora,
+                'confirmar' => $request->confirmar,
+                'observacion' => $request->observacion,
+                'multiuso' => 1,
+                'llego' => $request->llego,
+                'entro' => $request->entro,
+                'user_id' => $request->user_id,
+                'paciente_id' => $request->paciente_id,
+                'medico_id' => $request->medico_id,
+                'multiuso_id' => $request->multiuso_id,
+                'pago_tipo_id' => $request->pago_tipo_id,
+            ]);
+
+            return response()->json($multiuso, Response::HTTP_CREATED);
         }
 
-        $multiuso = Cita::create([
-            'fecha' => $request->fecha,
-            'silla' => $request->silla,
-            'pago' => $request->pago,
-            'hora' => $request->hora,
-            'confirmar' => $request->confirmar,
-            'multiuso' => 1,
-            'llego' => $request->llego,
-            'entro' => $request->entro,
-            'user_id' => $request->user_id,
-            'paciente_id' => $request->paciente_id,
-            'medico_id' => $request->medico_id,
-            'multiuso_id' => $request->multiuso_id,
-            'pago_tipo_id' => $request->pago_tipo_id,
-        ]);
 
-        return response()->json($multiuso, Response::HTTP_CREATED);
     }
 
     /**

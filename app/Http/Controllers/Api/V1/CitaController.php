@@ -11,30 +11,81 @@ use App\Models\Paciente;
 use App\Models\PagoTipo;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Carbon\Carbon;
 
 class CitaController extends Controller
 {
-
+    public function confirmarVisita()
+    {
+        $idPaciente = \Request::query('paciente_id', '');
+        $idMedico = \Request::query('medico_id', '');
+        $citas = Cita::where('paciente_id', $idPaciente)
+            ->where('medico_id', $idMedico)
+            ->get();
+        if ($citas->isEmpty()) {
+            $citas = [
+                [
+                    "id" => 1,
+                    "nombre" => "1a. vez"
+                ],
+                [
+                    "id" => 2,
+                    "nombre" => "Subsecuente"
+                ]
+            ];
+        } else {
+            $citas = [
+                [
+                    "id" => 2,
+                    "nombre" => "Subsecuente"
+                ]
+            ];
+        }
+        return response()->json([
+            "visita" => $citas
+        ]);
+    }
     public function mostrarSelects()
     {
+        $idPaciente = \Request::query('paciente_id', '');
+        $idMedico = \Request::query('medico_id', '');
         $consultorios = Consultorio::all();
         $pacientes = Paciente::all();
         $pagos = PagoTipo::all();
         $estados = Estado::all();
         $medicos = Medico::all();
 
-        $citas = Cita::where('paciente_id', 1)
-              ->where('medico_id', 1)
-              ->get();
+        $citas = Cita::where('paciente_id', $idPaciente)
+            ->where('medico_id', $idMedico)
+            ->get();
+        if ($citas->isEmpty()) {
+            $citas = [
+                [
+                    "id" => 1,
+                    "nombre" => "1a. vez"
+                ],
+                [
+                    "id" => 2,
+                    "nombre" => "Subsecuente"
+                ]
+            ];
+        } else {
+            $citas = [
+                [
+                    "id" => 2,
+                    "nombre" => "Subsecuente"
+                ]
+            ];
+        }
 
-        return $citas;
 
-        return response ()->json([
-            "consultorios"=> $consultorios,
-            "pacientes"=> $pacientes,
-            "pagos"=> $pagos,
-            "estados"=> $estados,
-            "medicos"=> $medicos
+        return response()->json([
+            "consultorios" => $consultorios,
+            "pacientes" => $pacientes,
+            "pagos" => $pagos,
+            "estados" => $estados,
+            "medicos" => $medicos,
+            "visita" => $citas
         ]);
     }
     public function confirmarCita(Request $request, string $id)
@@ -70,32 +121,57 @@ class CitaController extends Controller
      */
     public function store(Request $request)
     {
-        $citaExistente = Cita::where('fecha', $request->fecha)
-            ->where('hora', $request->hora)
-            ->where('medico_id', $request->medico_id)
-            ->first();
-        if ($citaExistente) {
-            // Si ya existe una cita, retornar un error 409
-            return response()->json(['error' => 'La cita ya está registrada para esta hora y fecha con el médico correspondiente.'], Response::HTTP_CONFLICT);
+        $horaSolicitud = Carbon::createFromFormat('H:i', $request->hora);
+        $inicioVentanaPermitida = Carbon::createFromFormat('H:i', '06:00');
+        $finVentanaPermitida = Carbon::createFromFormat('H:i', '06:59');
+
+        if ($horaSolicitud->between($inicioVentanaPermitida, $finVentanaPermitida, true)) {
+            $cita = Cita::create([
+                'fecha' => $request->fecha,
+                'silla' => $request->silla,
+                'pago' => $request->pago,
+                'hora' => $request->hora,
+                'confirmar' => $request->confirmar,
+                'observacion' => $request->observacion,
+                'multiuso' => 0,
+                'llego' => $request->llego,
+                'entro' => $request->entro,
+                'user_id' => $request->user_id,
+                'paciente_id' => $request->paciente_id,
+                'medico_id' => $request->medico_id,
+                'pago_tipo_id' => $request->pago_tipo_id,
+            ]);
+            return response()->json($cita, Response::HTTP_CREATED);
+
+        } else {
+            $citaExistente = Cita::where('fecha', $request->fecha)
+                ->where('hora', $request->hora)
+                ->where('medico_id', $request->medico_id)
+                ->where('paciente_id', $request->paciente_id)
+                ->first();
+            if ($citaExistente) {
+                // Si ya existe una cita, retornar un error 409
+                return response()->json(['error' => 'La cita ya está registrada para esta hora y fecha con el médico correspondiente.'], Response::HTTP_CONFLICT);
+            }
+
+            $cita = Cita::create([
+                'fecha' => $request->fecha,
+                'silla' => $request->silla,
+                'pago' => $request->pago,
+                'hora' => $request->hora,
+                'confirmar' => $request->confirmar,
+                'observacion' => $request->observacion,
+                'multiuso' => 0,
+                'llego' => $request->llego,
+                'entro' => $request->entro,
+                'user_id' => $request->user_id,
+                'paciente_id' => $request->paciente_id,
+                'medico_id' => $request->medico_id,
+                'pago_tipo_id' => $request->pago_tipo_id,
+            ]);
+
+            return response()->json($cita, Response::HTTP_CREATED);
         }
-
-        $cita = Cita::create([
-            'fecha' => $request->fecha,
-            'silla' => $request->silla,
-            'pago' => $request->pago,
-            'hora' => $request->hora,
-            'confirmar' => $request->confirmar,
-            'observacion' => $request->observacion,
-            'multiuso' => 0,
-            'llego' => $request->llego,
-            'entro' => $request->entro,
-            'user_id' => $request->user_id,
-            'paciente_id' => $request->paciente_id,
-            'medico_id' => $request->medico_id,
-            'pago_tipo_id' => $request->pago_tipo_id,
-        ]);
-
-        return response()->json($cita, Response::HTTP_CREATED);
     }
 
     /**
