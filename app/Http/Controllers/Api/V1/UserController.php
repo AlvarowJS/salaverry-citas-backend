@@ -28,14 +28,22 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $validatedData = $request->validate([
+            'nombres' => 'required|string|max:255',
+            'apellidos' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users', // Asegura que el correo no se repita
+            'password' => 'required|string|min:8',
+        ]);
+        
         $user = User::create([
-            'nombres' => $request->nombres,
-            'apellidos' => $request->apellidos,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'nombres' => $validatedData['nombres'],
+            'apellidos' => $validatedData['apellidos'],
+            'email' => $validatedData['email'],
+            'password' => Hash::make($validatedData['password']),
             'role_id' => 2,
             'status' => true
         ]);
+        
         return response()->json([
             'message' => 'Usuario creado exitosamente.',
             'user' => $user,
